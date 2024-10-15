@@ -11,7 +11,7 @@ public class Main {
     Sorter sorter = new Sorter(
       List.of(
         new MergeSort(10),
-        new BubbleSort(3)
+        new BubbleSort(6)
       )
     );
 

@@ -46,7 +46,7 @@
                                     <element>PACKAGE</element>
                                     <limits>
                                         <limit>
-                                            <counter>LINE</counter>
+                                            <counter>LINE</counter>z
                                             <value>COVEREDRATIO</value>
                                             <minimum>0.55</minimum>
                                         </limit>
