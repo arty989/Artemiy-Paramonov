@@ -6,10 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 public class ApplicationTest {
   @Test
@@ -67,78 +64,64 @@ public class ApplicationTest {
     EnrichmentService enrichmentService = new EnrichmentService(Map.of(EnrichmentType.MSISDN, new EnrichmentByMsisdn(repository)));
 
 
-    List<Message> expected = new CopyOnWriteArrayList<>(List.of(
-    new Message(Map.of(
-    "test", "1",
+    Map<String, Message> expected = new ConcurrentHashMap<>(Map.of(
+    "1", new Message(Map.of(
     "msisdn", "01",
     "firstName", "Artemiy",
     "lastName", "Paramonov"), EnrichmentType.MSISDN),
 
-    new Message(Map.of(
-    "test", "2",
+    "2", new Message(Map.of(
     "msisdn", "02",
     "firstName", "Ivan",
     "lastName", "Abramov"), EnrichmentType.MSISDN),
 
-    new Message(Map.of(
-    "test", "3",
+    "3", new Message(Map.of(
     "msisdn", "03",
     "firstName", "Petya",
     "lastName", "Ivanov"), EnrichmentType.MSISDN),
 
-    new Message(Map.of(
-    "test", "4",
+    "4", new Message(Map.of(
     "msisdn", "04",
     "firstName", "Vasya",
     "lastName", "Kruglov"), EnrichmentType.MSISDN),
 
-    new Message(Map.of(
-    "test", "5",
+    "5", new Message(Map.of(
     "msisdn", "05"), EnrichmentType.MSISDN))
     );
 
 
     List<Message> messages = new CopyOnWriteArrayList<>(List.of(
     new Message(Map.of(
-    "test", "1",
     "msisdn", "01"), EnrichmentType.MSISDN),
 
     new Message(Map.of(
-    "test", "2",
     "msisdn", "02"), EnrichmentType.MSISDN),
 
     new Message(Map.of(
-    "test", "3",
     "msisdn", "03"), EnrichmentType.MSISDN),
 
     new Message(Map.of(
-    "test", "4",
     "msisdn", "04"), EnrichmentType.MSISDN),
 
     new Message(Map.of(
-    "test", "5",
     "msisdn", "05"), EnrichmentType.MSISDN))
     );
 
-    List<Message> enrichmentResults = new CopyOnWriteArrayList<>();
+    Map<String, Message> enrichmentResults = new ConcurrentHashMap<>();
     ExecutorService executorService = Executors.newFixedThreadPool(5);
     CountDownLatch latch = new CountDownLatch(5);
     for (int i = 0; i < 5; i++) {
       Message message = messages.get(i);
-      final int position = i;
+      final String key = i + 1 + "";
       executorService.submit(() -> {
-        enrichmentResults.add(position,
+        enrichmentResults.put(key,
         enrichmentService.enrich(message)
         );
         latch.countDown();
       });
     }
     latch.await();
-    for (int i = 0; i < 5; i++) {
-      Message expectedMessage = expected.get(i);
-      Message actualMessage = enrichmentResults.get(i);
-      assertEquals(expectedMessage.content(), actualMessage.content());
-      assertEquals(expectedMessage.enrichmentType(), actualMessage.enrichmentType());
-    }
+    executorService.shutdown();
+    assertEquals(enrichmentResults, expected);
   }
 }
