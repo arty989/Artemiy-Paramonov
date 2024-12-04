@@ -30,11 +30,11 @@ public class InMemoryCommentRepository implements CommentRepository {
 
   @Override
   public CommentId create(Comment comment) throws CommentIdDuplicatedException {
-    if (commentMap.get(comment.getCommentId()) != null) {
-      throw new CommentIdDuplicatedException("Comment with the given id already exists:" + comment.getCommentId().id());
+    if (commentMap.get(comment.commentId()) != null) {
+      throw new CommentIdDuplicatedException("Comment with the given id already exists:" + comment.commentId().id());
     }
-    commentMap.put(comment.getCommentId(), comment);
-    return comment.getCommentId();
+    commentMap.put(comment.commentId(), comment);
+    return comment.commentId();
   }
 
   @Override

@@ -41,7 +41,7 @@ public class ArticleFreemarkerController implements Controller{
       List<Article> articles = articleService.findAllArticles();
       List<Map<String, String>> articleMapList =
         articles.stream()
-          .map(article -> Map.of("name", article.getName(), "countComments", "" + article.getComments().size()))
+          .map(article -> Map.of("name", article.name(), "countComments", "" + article.comments().size()))
           .toList();
       Map<String, Object> model = new HashMap<>();
       model.put("articles", articleMapList);

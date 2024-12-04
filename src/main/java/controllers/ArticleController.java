@@ -80,7 +80,7 @@ public class ArticleController implements Controller {
         return objectMapper.writeValueAsString(new ArticleDeleteResponse(articleId));
       } catch (ArticleDeleteException e) {
         LOG.warn("Error deleting article: {}", articleId, e);
-        response.status(400);
+        response.status(404);
         return objectMapper.writeValueAsString(new ErrorResponse(e.getMessage()));
       } catch (Exception e) {
         LOG.error("Unexpected error while deleting article", e);
@@ -105,7 +105,7 @@ public class ArticleController implements Controller {
         return objectMapper.writeValueAsString(new ArticleUpdateResponse(articleId));
       } catch (ArticleUpdateException e) {
         LOG.warn("Error updating article: {}", articleId, e);
-        response.status(400);
+        response.status(404);
         return objectMapper.writeValueAsString(new ErrorResponse(e.getMessage()));
       } catch (Exception e) {
         LOG.error("Unexpected error while updating article", e);
@@ -128,7 +128,7 @@ public class ArticleController implements Controller {
         return objectMapper.writeValueAsString(new ArticleGetResponse(article));
       } catch (ArticleFindException e) {
         LOG.warn("Error getting article: {}", articleId, e);
-        response.status(400);
+        response.status(404);
         return objectMapper.writeValueAsString(new ErrorResponse(e.getMessage()));
       } catch (Exception e) {
         LOG.error("Unexpected error while getting article", e);
@@ -191,7 +191,7 @@ public class ArticleController implements Controller {
         return objectMapper.writeValueAsString(new CommentDeleteResponse(commentId));
       } catch (CommentDeleteException e) {
         LOG.warn("Error deleting comment: {}", commentId, e);
-        response.status(400);
+        response.status(404);
         return objectMapper.writeValueAsString(new ErrorResponse(e.getMessage()));
       } catch (Exception e) {
         LOG.error("Unexpected error while deleting comment", e);

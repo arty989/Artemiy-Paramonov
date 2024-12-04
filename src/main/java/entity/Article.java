@@ -5,18 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Article {
-  private final ArticleId id;
-  private final String name;
-  private final Set<String> tags;
-  private final List<Comment> comments;
-
-  public Article(ArticleId id, String name, Set<String> tags, List<Comment> comments) {
-    this.id = id;
-    this.name = name;
-    this.tags = tags;
-    this.comments = comments;
-  }
+public record Article(ArticleId id, String name, Set<String> tags, List<Comment> comments) {
 
   public Article withName(String newName) {
     return new Article(this.id, newName, this.tags, this.comments);
@@ -30,19 +19,13 @@ public class Article {
     return new Article(this.id, this.name, this.tags, newComments);
   }
 
-  public ArticleId getId() {
-    return this.id;
-  }
-
-  public String getName() {
-    return this.name;
-  }
-
-  public Set<String> getTags() {
+  @Override
+  public Set<String> tags() {
     return new HashSet<>(this.tags);
   }
 
-  public List<Comment> getComments() {
+  @Override
+  public List<Comment> comments() {
     return new ArrayList<>(this.comments);
   }
 }

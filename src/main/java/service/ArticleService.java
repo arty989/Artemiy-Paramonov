@@ -52,8 +52,8 @@ public class ArticleService {
     try {
       Article deleteArticle = articleRepository.findById(articleId);
       articleRepository.delete(articleId);
-      for (Comment comment : deleteArticle.getComments()) {
-          commentRepository.delete(comment.getCommentId());
+      for (Comment comment : deleteArticle.comments()) {
+          commentRepository.delete(comment.commentId());
       }
     } catch (ArticleNotFoundException e) {
       throw new ArticleDeleteException("Cannot delete article with id=" + articleId.id(), e);
@@ -91,7 +91,7 @@ public class ArticleService {
     try {
       Comment deletingComment = commentRepository.findById(commentId);
       commentRepository.delete(commentId);
-      articleRepository.deleteComment(deletingComment.getArticleId(), deletingComment);
+      articleRepository.deleteComment(deletingComment.articleId(), deletingComment);
     } catch (CommentNotFoundException e) {
       throw new CommentDeleteException("Cannot delete comment with id=" + commentId.id(), e);
     }

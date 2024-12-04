@@ -37,19 +37,19 @@ public class InMemoryArticleRepository implements ArticleRepository {
 
   @Override
   public ArticleId create(Article article) throws ArticleIdDuplicatedException {
-    if (articleMap.get(article.getId()) != null) {
-      throw new ArticleIdDuplicatedException("Article with the given id already exists:" + article.getId().id());
+    if (articleMap.get(article.id()) != null) {
+      throw new ArticleIdDuplicatedException("Article with the given id already exists:" + article.id().id());
     }
-    articleMap.put(article.getId(), article);
-    return article.getId();
+    articleMap.put(article.id(), article);
+    return article.id();
   }
 
   @Override
   public void update(Article article) throws ArticleNotFoundException {
-    if (articleMap.get(article.getId()) == null) {
-      throw new ArticleNotFoundException("Cannot find article by id=" + article.getId().id());
+    if (articleMap.get(article.id()) == null) {
+      throw new ArticleNotFoundException("Cannot find article by id=" + article.id().id());
     }
-    articleMap.put(article.getId(), article);
+    articleMap.put(article.id(), article);
   }
 
   @Override
@@ -58,7 +58,7 @@ public class InMemoryArticleRepository implements ArticleRepository {
       throw new ArticleNotFoundException("Cannot find article by id=" + articleId.id());
     }
     Article articleToAdd = articleMap.get(articleId);
-    List<Comment> articleComments = articleToAdd.getComments();
+    List<Comment> articleComments = articleToAdd.comments();
     articleComments.add(comment);
     articleMap.put(articleId, articleToAdd.withComments(articleComments));
   }
@@ -69,7 +69,7 @@ public class InMemoryArticleRepository implements ArticleRepository {
       throw new ArticleNotFoundException("Cannot find article by id=" + articleId.id());
     }
     Article articleToAdd = articleMap.get(articleId);
-    List<Comment> articleComments = articleToAdd.getComments();
+    List<Comment> articleComments = articleToAdd.comments();
     articleComments.remove(comment);
     articleMap.put(articleId, articleToAdd.withComments(articleComments));
   }
